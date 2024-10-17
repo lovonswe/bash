@@ -11,6 +11,7 @@ directory_search() {
     read -p "Enter directory name (press Enter for default '$default_directory'): " directory
     directory=${directory:-$default_directory}  # Use default if empty
 
+    # Check if directory creation is successful
     if [ -d "$directory" ]; then
         echo "Directory '$directory' exists."
         echo ""
@@ -19,7 +20,7 @@ directory_search() {
         echo ""
     else
         echo "Directory '$directory' does not exist. Creating folder..."
-        mkdir -p "$directory"
+        mkdir -p "$directory" || { echo "Failed to create directory '$directory'. Try again."; exit 1; }
     fi
 
     # Prompt for file name
@@ -31,9 +32,9 @@ directory_search() {
         file_name="$file_name$default_extension"  # Append default extension if none is provided
     fi
 
-    # Create the file using touch
+    # Check if file creation is successful
     file_path="$directory/$file_name"
-    touch "$file_path"
+    touch "$file_path" || { echo "Failed to create file '$file_path'. Try again."; exit 1; }
 
     # Write initial lines to the file
     for i in {1..10}; do
