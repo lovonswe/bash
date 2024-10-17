@@ -62,43 +62,4 @@ directory_search() {
     echo "File '$file_name' has been created in '$directory'."
 }
 
-# Task 2: Combine all txt files into a single file
-combine_txt_files() {
-    input_directory="$1"
-    output_file="$2"
-    
-    if [ -d "$input_directory" ]; then
-        echo "Combining all .txt files from '$input_directory' into '$output_file'."
-        cat "$input_directory"/*.txt > "$output_file"
-        echo "All .txt files have been combined into '$output_file'."
-    else
-        echo "Directory '$input_directory' does not exist."
-    fi
-}
-
-# Task 3: Call child script and process based on success/failure
-call_child_script() {
-    child_script="$1"
-    
-    if [ -x "$child_script" ]; then
-        "$child_script"
-        if [ $? -eq 0 ]; then
-            echo "Child script processed successfully."
-        else
-            echo "Child script failed. Stopping the parent script."
-            exit 1
-        fi
-    else
-        echo "Child script '$child_script' is not executable or not found."
-        exit 1
-    fi
-}
-
-# Main execution
-
-# Task 1 example usage
 directory_search
-
-# Uncomment and modify these for additional tasks
-# combine_txt_files "/path/to/your/directory_with_txt_files" "/path/to/output_file.txt"
-# call_child_script "/path/to/child_script.sh"
