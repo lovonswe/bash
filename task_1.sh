@@ -1,48 +1,64 @@
 #!/bin/bash
 
+# Default values
+default_directory="default_directory"
+default_filename="my.txt"
+default_extension=".txt"
+
 # Task 1: Directory search and file creation
 directory_search() {
-    directory="$1"
-    
+    # Prompt for directory name
+    read -p "Enter directory name (press Enter for default '$default_directory'): " directory
+    directory=${directory:-$default_directory}  # Use default if empty
+
     if [ -d "$directory" ]; then
         echo "Directory '$directory' exists."
         echo ""
-        echo "Take a look at the content : "
-        ls -lht
+        echo "Take a look at the content: "
+        ls -lht "$directory"
         echo ""
     else
         echo "Directory '$directory' does not exist. Creating folder..."
         mkdir -p "$directory"
     fi
-    
-    # Create my.txt file using touch
-    file_path="$directory/my.txt"
+
+    # Prompt for file name
+    read -p "Enter file name (press Enter for default '$default_filename'): " file_name
+    file_name=${file_name:-$default_filename}  # Use default if empty
+
+    # Check if the file name already has an extension
+    if [[ "$file_name" != *.* ]]; then
+        file_name="$file_name$default_extension"  # Append default extension if none is provided
+    fi
+
+    # Create the file using touch
+    file_path="$directory/$file_name"
     touch "$file_path"
 
+    # Write initial lines to the file
     for i in {1..10}; do
-        echo "This is the ${ordinal[$((i-1))]} line of task_1 file" >> "$file_path"
+        echo "This is line $i of $file_name" >> "$file_path"
     done
 
-    #now write some content in the file from user input
     # Ask user if they want to add content to the file
-read -p "Do you want to put some content in the file? (yes/no): " answer
+    read -p "Do you want to put some content in the file '$file_name'? (yes/no): " answer
 
-# Convert answer to lowercase
-answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+    # Convert answer to lowercase
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
-# Check user response
-if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
-    # Prompt for user input
-    read -p "Please enter the content you want to add: " user_input
+    # Check user response
+    if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+        # Prompt for user input
+        read -p "Please enter the content you want to add: " user_input
 
-    # Append the user input to the file
-    echo "$user_input" >> "$file_path"
-    echo "Your content has been added to 'my.txt'."
-else
-    echo "No additional content will be added."
-fi
+        # Append the user input to the file
+        echo "$user_input" >> "$file_path"
+        echo "Your content has been added to '$file_name'."
+    else
+        echo "No additional content will be added."
+    fi
 
-    echo "File 'my.txt' has been created in '$directory'."
+    echo "File '$file_name' has been created in '$directory'."
 }
 
 # Task 2: Combine all txt files into a single file
@@ -80,10 +96,8 @@ call_child_script() {
 # Main execution
 
 # Task 1 example usage
-directory_search "path/to/directory"
+directory_search
 
-# # Task 2 example usage
+# Uncomment and modify these for additional tasks
 # combine_txt_files "/path/to/your/directory_with_txt_files" "/path/to/output_file.txt"
-
-# # Task 3 example usage
 # call_child_script "/path/to/child_script.sh"
