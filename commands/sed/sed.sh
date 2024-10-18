@@ -47,6 +47,12 @@ sed '/unix/d' geekfile.txt
 # for inserting a new line after full stop 
 sed '/./a\This is new line.' geekfile.txt
 
+# add new line in the original text file
+sed -i '/./a\This is new line.' geekfile.txt
+
+# use this command to delet this newly added lines 
+sed -i '/This/d' geekfile.txt
+
 
 
 # additional : 
